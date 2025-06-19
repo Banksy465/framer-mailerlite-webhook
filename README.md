@@ -67,3 +67,4 @@ You are safe to make your repository public!
 - Your current setup is secure for a public repo, as long as secrets are only in Vercel environment variables and not in the code or committed files.
 
 If you want, I can give you a command to scan your repo for secrets, or you can let me know if you want a more thorough check! 
+
