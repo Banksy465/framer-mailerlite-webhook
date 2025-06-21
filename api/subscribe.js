@@ -15,6 +15,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
+  console.log("Received request body:", req.body);
+
   const { email, group_id, ...fields } = req.body;
 
   if (!email || !group_id) {
