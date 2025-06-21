@@ -2,32 +2,54 @@ import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { email, name } = req.body;
+  const { email, group_id, ...fields } = req.body;
 
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required' });
+  if (!email || !group_id) {
+    return res
+      .status(400)
+      .json({ message: 'Email and Group ID are required.' });
   }
 
-  const API_KEY = process.env.MAILERLITE_API_KEY;
-  const GROUP_ID = process.env.MAILERLITE_GROUP_ID;
+  const MAILERLITE_API_KEY = process.env.MAILERLITE_API_KEY;
+  const MAILERLITE_API_URL = 'https://connect.mailerlite.com/api/subscribers';
 
-  const response = await fetch(`https://api.mailerlite.com/api/v2/groups/${GROUP_ID}/subscribers`, {
+  if (!MAILERLITE_API_KEY) {
+    console.error('MailerLite API Key is not configured in environment variables.');
+    return res
+      .status(500)
+      .json({ message: 'Server configuration error.' });
+  }
+
+  const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-MailerLite-ApiKey': API_KEY,
+      Authorization: `Bearer ${MAILERLITE_API_KEY}`,
     },
-    body: JSON.stringify({ email, name }),
-  });
+    body: JSON.stringify({
+      email: email,
+      groups: [group_id],
+      fields: fields,
+    }),
+  };
 
-  if (!response.ok) {
-    const error = await response.json();
-    return res.status(500).json({ error: error.error.message || 'MailerLite error' });
+  try {
+    const response = await fetch(MAILERLITE_API_URL, options);
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('MailerLite API Error:', data);
+      return res
+        .status(response.status)
+        .json({ message: data.message || 'An error occurred submitting to MailerLite.' });
+    }
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    console.error('Fetch Error:', error);
+    res.status(500).json({ message: 'An internal server error occurred.' });
   }
-
-  const data = await response.json();
-  return res.status(200).json({ success: true, data });
 } 
