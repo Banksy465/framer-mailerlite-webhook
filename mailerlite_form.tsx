@@ -1113,6 +1113,7 @@ export default function MailerLiteForm({
                             color: colors.errorRed,
                             marginBottom: 16,
                             textAlign: "center",
+                            fontWeight: 500,
                         }}
                         role="alert"
                     >
