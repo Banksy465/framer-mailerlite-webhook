@@ -852,7 +852,7 @@ export default function MailerLiteForm({
                                                     style={{
                                                         display: "flex",
                                                         alignItems: "center",
-                                                        marginBottom: 16,
+                                                        marginBottom: idx === options.length - 1 ? 0 : 16,
                                                         fontWeight: 400,
                                                         fontSize: 16,
                                                         lineHeight: '140%',
