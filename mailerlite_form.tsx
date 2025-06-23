@@ -789,6 +789,7 @@ export default function MailerLiteForm({
                             }, index) => (
                                 <div key={name}>
                                     <label
+                                        id={`${name}-label`}
                                         htmlFor={name}
                                         style={{
                                             display: "block",
@@ -805,9 +806,8 @@ export default function MailerLiteForm({
                                         <div
                                             id={`${name}-hint`}
                                             style={{
-                                                fontSize: 16,
-                                                lineHeight: '140%',
-                                                color: colors.textSecondary,
+                                                fontSize: 14,
+                                                color: 'rgba(3, 9, 38, 0.6)',
                                                 marginTop: 4,
                                             }}
                                         >
@@ -828,9 +828,10 @@ export default function MailerLiteForm({
                                             <div
                                                 id={`${name}-error`}
                                                 style={{
-                                                    color: "#ff0000",
-                                                    marginBottom: "2px",
+                                                    color: colors.errorRed,
                                                     fontSize: 14,
+                                                    fontWeight: 500,
+                                                    marginBottom: "2px",
                                                 }}
                                                 role="alert"
                                             >
@@ -841,7 +842,8 @@ export default function MailerLiteForm({
                                     {type === "radio" && options && (
                                         <div
                                             role="radiogroup"
-                                            aria-labelledby={name}
+                                            aria-labelledby={`${name}-label`}
+                                            aria-describedby={errors[name] ? `${name}-error` : hint ? `${name}-hint` : undefined}
                                             style={{ paddingLeft: 0 }}
                                         >
                                             {options.map((opt, idx) => (
@@ -855,6 +857,9 @@ export default function MailerLiteForm({
                                                         fontSize: 16,
                                                         lineHeight: '140%',
                                                         color: colors.textSecondary,
+                                                        minHeight: 44,
+                                                        minWidth: 44,
+                                                        padding: '12px 0',
                                                     }}
                                                 >
                                                     <input
@@ -863,11 +868,7 @@ export default function MailerLiteForm({
                                                         value={opt.value}
                                                         checked={formData[name] === opt.value}
                                                         onChange={e => {
-                                                            if (formData[name] === opt.value) {
-                                                                setFormData(prev => ({ ...prev, [name]: null }))
-                                                            } else {
-                                                                setFormData(prev => ({ ...prev, [name]: opt.value }))
-                                                            }
+                                                            setFormData(prev => ({ ...prev, [name]: opt.value }))
                                                         }}
                                                         required={required}
                                                         aria-required={required}
