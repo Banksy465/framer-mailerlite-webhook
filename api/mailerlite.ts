@@ -67,7 +67,9 @@ export default async function handler(
     try {
         const payload = {
             email,
-            fields: fields || {},
+            fields: fields ? Object.fromEntries(
+                Object.entries(fields).map(([key, value]) => [key.toLowerCase(), value])
+            ) : {},
             groups: groups || [],
         }
 
