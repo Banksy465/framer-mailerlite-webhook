@@ -677,7 +677,7 @@ export default function MailerLiteForm({
     const optionStyle = (idx: number, optionsLength: number) => ({
         display: 'flex',
         alignItems: 'center',
-        marginBottom: idx === optionsLength - 1 ? 0 : 16,
+        marginBottom: 0,
         fontWeight: 400,
         fontSize: 16,
         lineHeight: '140%',
