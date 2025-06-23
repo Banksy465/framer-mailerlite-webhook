@@ -859,7 +859,7 @@ export default function MailerLiteForm({
                                                         color: colors.textSecondary,
                                                         minHeight: 44,
                                                         minWidth: 44,
-                                                        padding: '12px 0',
+                                                        padding: '0',
                                                     }}
                                                 >
                                                     <input
