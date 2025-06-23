@@ -765,16 +765,18 @@ export default function MailerLiteForm({
                                         key={field}
                                         style={{ marginBottom: 4 }}
                                     >
-                                        <a
-                                            href={`#${field}`}
-                                            style={{
-                                                textDecoration: "none",
-                                                color: "#ff0000",
-                                                fontSize: 14,
-                                            }}
-                                        >
-                                            {message}
-                                        </a>
+                                        <span style={{ fontWeight: 500 }}>
+                                            <a
+                                                href={`#${field}`}
+                                                style={{
+                                                    textDecoration: "none",
+                                                    color: "#ff0000",
+                                                    fontSize: 14,
+                                                }}
+                                            >
+                                                {message}
+                                            </a>
+                                        </span>
                                     </div>
                                 )
                             )}
