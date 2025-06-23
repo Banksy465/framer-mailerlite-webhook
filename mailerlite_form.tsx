@@ -232,6 +232,8 @@ export default function MailerLiteForm({
                 initial[field.name] = []
             } else if (field.type === "checkbox") {
                 initial[field.name] = false
+            } else if (field.type === "radio") {
+                initial[field.name] = null
             } else {
                 initial[field.name] = null
             }
@@ -267,7 +269,7 @@ export default function MailerLiteForm({
             }
             .other-text-input {
                 margin-left: 8px;
-                margin-right: 16px;
+                margin-right: 0;
                 border: 0;
                 border-bottom: 1px solid #ccc;
                 font-family: 'Poppins', sans-serif;
@@ -275,12 +277,20 @@ export default function MailerLiteForm({
                 flex: 1;
                 padding-left: 4px;
                 padding-bottom: 0;
+                padding-right: 24px;
                 background: transparent;
                 outline: none;
-                line-height: normal;
+                line-height: 1.4;
                 height: auto;
                 border-radius: 0;
                 transition: border-bottom-color 0.2s ease, border-bottom-width 0.2s ease;
+                align-self: center;
+                vertical-align: middle;
+                display: inline-flex;
+                align-items: center;
+                width: 100%;
+                max-width: calc(100% - 24px);
+                box-sizing: border-box;
             }
             .other-text-input:hover:not(:disabled),
             .other-text-input:focus:not(:disabled) {
@@ -367,17 +377,22 @@ export default function MailerLiteForm({
             const value = formData[field.name]
             if (field.required) {
                 if (field.type === "checkbox" && !value) {
-                    newErrors[field.name] =
-                        `${field.label.toLowerCase()} is required`
+                    newErrors[field.name] = `${field.label.toLowerCase()} is required`
                 } else if (
                     field.type !== "checkbox" &&
                     (!value ||
                         (typeof value === "string" && value.trim() === "") ||
                         (Array.isArray(value) && value.length === 0))
                 ) {
-                    newErrors[field.name] =
-                        `${field.label.toLowerCase()} is required`
+                    newErrors[field.name] = `${field.label.toLowerCase()} is required`
                 }
+            }
+            if (
+                field.type === "radio" &&
+                value === "other" &&
+                (!formData[`${field.name}_other`] || (typeof formData[`${field.name}_other`] === 'string' && formData[`${field.name}_other`].trim() === ""))
+            ) {
+                newErrors[field.name] = `${field.label} is required`
             }
             if (
                 field.type === "email" &&
@@ -387,7 +402,6 @@ export default function MailerLiteForm({
                 newErrors[field.name] = "Enter a valid email address"
             }
         })
-
         if (mode === "unsubscribe") {
             const emailField = fields.find((f) => f.type === "email")
             if (emailField) {
@@ -397,7 +411,6 @@ export default function MailerLiteForm({
                 }
             }
         }
-
         return newErrors
     }
 
@@ -582,6 +595,8 @@ export default function MailerLiteForm({
                 initial[field.name] = []
             } else if (field.type === "checkbox") {
                 initial[field.name] = false
+            } else if (field.type === "radio") {
+                initial[field.name] = null
             } else {
                 initial[field.name] = null
             }
@@ -609,6 +624,8 @@ export default function MailerLiteForm({
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    maxWidth: 480,
+                    margin: '0 auto',
                 }}
             >
                 <h2
@@ -618,7 +635,7 @@ export default function MailerLiteForm({
                         lineHeight: "120%",
                         color: colors.textPrimary,
                         marginTop: 8,
-                        marginBottom: 0,
+                        marginBottom: 8,
                     }}
                 >
                     {mode === "unsubscribe" ? "Unsubscribed" : successHeading}
@@ -832,7 +849,7 @@ export default function MailerLiteForm({
                                                     key={opt.value}
                                                     style={{
                                                         display: "flex",
-                                                        alignItems: "flex-start",
+                                                        alignItems: "center",
                                                         marginBottom: 12,
                                                         fontWeight: 400,
                                                         fontSize: 16,
@@ -844,15 +861,14 @@ export default function MailerLiteForm({
                                                         type="radio"
                                                         name={name}
                                                         value={opt.value}
-                                                        checked={
-                                                            formData[name] ===
-                                                            opt.value
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleChange(
-                                                                e
-                                                            )
-                                                        }
+                                                        checked={formData[name] === opt.value}
+                                                        onChange={e => {
+                                                            if (formData[name] === opt.value) {
+                                                                setFormData(prev => ({ ...prev, [name]: null }))
+                                                            } else {
+                                                                setFormData(prev => ({ ...prev, [name]: opt.value }))
+                                                            }
+                                                        }}
                                                         required={required}
                                                         aria-required={required}
                                                     />
@@ -862,8 +878,9 @@ export default function MailerLiteForm({
                                             {allowOther && (
                                                 <label
                                                     style={{
-                                                        display: "flex",
-                                                        alignItems: "flex-start",
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        marginBottom: 12,
                                                         fontWeight: 400,
                                                         fontSize: 16,
                                                         lineHeight: '140%',
@@ -874,34 +891,28 @@ export default function MailerLiteForm({
                                                         type="radio"
                                                         name={name}
                                                         value="other"
-                                                        checked={
-                                                            formData[name] ===
-                                                            "other"
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleChange(
-                                                                e
-                                                            )
-                                                        }
+                                                        checked={formData[name] === 'other'}
+                                                        onChange={e => {
+                                                            if (formData[name] === 'other') {
+                                                                setFormData(prev => ({ ...prev, [name]: null }))
+                                                            } else {
+                                                                setFormData(prev => ({ ...prev, [name]: 'other' }))
+                                                            }
+                                                        }}
                                                         required={required}
                                                         aria-required={required}
                                                     />
                                                     Other:
-                                                    <input
-                                                        type="text"
-                                                        className="other-text-input"
-                                                        name={`${name}_other`}
-                                                        value={
-                                                            (formData[
-                                                                `${name}_other`
-                                                            ] as string) || ""
-                                                        }
-                                                        onChange={handleChange}
-                                                        disabled={
-                                                            formData[name] !==
-                                                            "other"
-                                                        }
-                                                    />
+                                                    <span style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                                                        <input
+                                                            type="text"
+                                                            className="other-text-input"
+                                                            name={`${name}_other`}
+                                                            value={(formData[`${name}_other`] as string) || ""}
+                                                            onChange={handleChange}
+                                                            disabled={formData[name] !== 'other'}
+                                                        />
+                                                    </span>
                                                 </label>
                                             )}
                                         </div>
@@ -912,114 +923,128 @@ export default function MailerLiteForm({
                                             aria-labelledby={name}
                                             style={{ paddingLeft: 0 }}
                                         >
-                                            {options.map((opt, idx) => (
+                                            {options.map((opt, idx) => {
+                                                const isChecked = Array.isArray(formData[name])
+                                                    ? (formData[name] as string[]).includes(opt.value)
+                                                    : false
+                                                return (
+                                                    <label
+                                                        key={opt.value}
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            marginBottom: 12,
+                                                            fontWeight: 400,
+                                                            fontSize: 16,
+                                                            lineHeight: '140%',
+                                                            color: colors.textSecondary,
+                                                            position: 'relative',
+                                                        }}
+                                                    >
+                                                        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative' }}>
+                                                            <input
+                                                                type="checkbox"
+                                                                name={name}
+                                                                value={opt.value}
+                                                                checked={isChecked}
+                                                                onChange={handleChange}
+                                                                required={required && (!Array.isArray(formData[name]) || (formData[name] as string[]).length === 0)}
+                                                                aria-required={required}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    opacity: 0,
+                                                                    width: 20,
+                                                                    height: 20,
+                                                                    left: 0,
+                                                                    top: 0,
+                                                                    margin: 0,
+                                                                    zIndex: 1,
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                            />
+                                                            <span style={{
+                                                                width: 20,
+                                                                height: 20,
+                                                                borderRadius: 4,
+                                                                border: `1.5px solid ${isChecked ? colors.brandBlue : 'rgba(6, 18, 77, 0.45)'}`,
+                                                                background: isChecked ? colors.brandBlue : '#fff',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                transition: 'border-color 0.2s, background 0.2s',
+                                                            }}>
+                                                                {isChecked && (
+                                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                                                        <polyline points="2,7 5,10 10,3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                    </svg>
+                                                                )}
+                                                            </span>
+                                                        </span>
+                                                        {opt.label}
+                                                    </label>
+                                                )
+                                            })}
+                                            {allowOther && (
                                                 <label
-                                                    key={opt.value}
                                                     style={{
-                                                        display: "flex",
-                                                        alignItems: "flex-start",
+                                                        display: 'flex',
+                                                        alignItems: 'center',
                                                         marginBottom: 12,
                                                         fontWeight: 400,
                                                         fontSize: 16,
                                                         lineHeight: '140%',
                                                         color: colors.textSecondary,
+                                                        position: 'relative',
                                                     }}
                                                 >
-                                                    <input
-                                                        type="checkbox"
-                                                        name={name}
-                                                        value={opt.value}
-                                                        checked={
-                                                            Array.isArray(
-                                                                formData[name]
-                                                            )
-                                                                ? (
-                                                                      formData[
-                                                                          name
-                                                                      ] as string[]
-                                                                  ).includes(
-                                                                      opt.value
-                                                                  )
-                                                                : false
-                                                        }
-                                                        onChange={handleChange}
-                                                        required={
-                                                            required &&
-                                                            (!Array.isArray(
-                                                                formData[name]
-                                                            ) ||
-                                                                (
-                                                                    formData[
-                                                                        name
-                                                                    ] as string[]
-                                                                ).length === 0)
-                                                        }
-                                                        aria-required={
-                                                            required
-                                                        }
-                                                    />
-                                                    {opt.label}
-                                                </label>
-                                            ))}
-                                            {allowOther && (
-                                                <label
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems:
-                                                            "flex-start",
-                                                        fontWeight: 400,
-                                                        fontSize: 16,
-                                                        lineHeight: '140%',
-                                                        color: colors.textSecondary,
-                                                    }}
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        name={name}
-                                                        value="other"
-                                                        checked={
-                                                            Array.isArray(
-                                                                formData[name]
-                                                            )
-                                                                ? (
-                                                                      formData[
-                                                                          name
-                                                                      ] as string[]
-                                                                  ).includes(
-                                                                      "other"
-                                                                  )
-                                                                : false
-                                                        }
-                                                        onChange={handleChange}
-                                                    />
+                                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative' }}>
+                                                        <input
+                                                            type="checkbox"
+                                                            name={name}
+                                                            value="other"
+                                                            checked={Array.isArray(formData[name]) ? (formData[name] as string[]).includes('other') : false}
+                                                            onChange={handleChange}
+                                                            style={{
+                                                                position: 'absolute',
+                                                                opacity: 0,
+                                                                width: 20,
+                                                                height: 20,
+                                                                left: 0,
+                                                                top: 0,
+                                                                margin: 0,
+                                                                zIndex: 1,
+                                                                cursor: 'pointer',
+                                                            }}
+                                                        />
+                                                        <span style={{
+                                                            width: 20,
+                                                            height: 20,
+                                                            borderRadius: 4,
+                                                            border: `1.5px solid ${Array.isArray(formData[name]) && (formData[name] as string[]).includes('other') ? colors.brandBlue : 'rgba(6, 18, 77, 0.45)'}`,
+                                                            background: Array.isArray(formData[name]) && (formData[name] as string[]).includes('other') ? colors.brandBlue : '#fff',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            transition: 'border-color 0.2s, background 0.2s',
+                                                        }}>
+                                                            {Array.isArray(formData[name]) && (formData[name] as string[]).includes('other') && (
+                                                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                                                    <polyline points="2,7 5,10 10,3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                                </svg>
+                                                            )}
+                                                        </span>
+                                                    </span>
                                                     Other:
-                                                    <input
-                                                        type="text"
-                                                        className="other-text-input"
-                                                        name={`${name}_other`}
-                                                        value={
-                                                            (formData[
-                                                                `${name}_other`
-                                                            ] as string) || ""
-                                                        }
-                                                        onChange={handleChange}
-                                                        disabled={
-                                                            !(
-                                                                Array.isArray(
-                                                                    formData[
-                                                                        name
-                                                                    ]
-                                                                ) &&
-                                                                (
-                                                                    formData[
-                                                                        name
-                                                                    ] as string[]
-                                                                ).includes(
-                                                                    "other"
-                                                                )
-                                                            )
-                                                        }
-                                                    />
+                                                    <span style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                                                        <input
+                                                            type="text"
+                                                            className="other-text-input"
+                                                            name={`${name}_other`}
+                                                            value={(formData[`${name}_other`] as string) || ""}
+                                                            onChange={handleChange}
+                                                            disabled={!(Array.isArray(formData[name]) && (formData[name] as string[]).includes('other'))}
+                                                        />
+                                                    </span>
                                                 </label>
                                             )}
                                         </div>
@@ -1313,11 +1338,6 @@ addPropertyControls(MailerLiteForm, {
         title: "Container Padding",
         defaultValue: "24px 24px 40px 24px",
     },
-    containerBorderColor: {
-        type: ControlType.Color,
-        title: "Border",
-        defaultValue: "rgba(6, 18, 77, 0.45)",
-    },
     fieldPadding: {
         type: ControlType.Number,
         title: "Field Gap",
@@ -1325,6 +1345,11 @@ addPropertyControls(MailerLiteForm, {
         min: 0,
         max: 100,
         unit: "px",
+    },
+    containerBorderColor: {
+        type: ControlType.Color,
+        title: "Border",
+        defaultValue: "rgba(6, 18, 77, 0.45)",
     },
     showMarketingPermissions: {
         type: ControlType.Boolean,
