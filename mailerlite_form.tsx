@@ -806,8 +806,8 @@ export default function MailerLiteForm({
                                         <div
                                             id={`${name}-hint`}
                                             style={{
-                                                fontSize: 14,
-                                                color: 'rgba(3, 9, 38, 0.6)',
+                                                fontSize: 16,
+                                                color: 'rgba(3, 9, 38, 0.8)',
                                                 marginTop: 4,
                                             }}
                                         >
@@ -852,7 +852,7 @@ export default function MailerLiteForm({
                                                     style={{
                                                         display: "flex",
                                                         alignItems: "center",
-                                                        marginBottom: 12,
+                                                        marginBottom: 16,
                                                         fontWeight: 400,
                                                         fontSize: 16,
                                                         lineHeight: '140%',
@@ -881,7 +881,7 @@ export default function MailerLiteForm({
                                                     style={{
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        marginBottom: 12,
+                                                        marginBottom: 16,
                                                         fontWeight: 400,
                                                         fontSize: 16,
                                                         lineHeight: '140%',
@@ -934,7 +934,7 @@ export default function MailerLiteForm({
                                                         style={{
                                                             display: 'flex',
                                                             alignItems: 'center',
-                                                            marginBottom: 12,
+                                                            marginBottom: 16,
                                                             fontWeight: 400,
                                                             fontSize: 16,
                                                             lineHeight: '140%',
@@ -990,7 +990,7 @@ export default function MailerLiteForm({
                                                     style={{
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        marginBottom: 12,
+                                                        marginBottom: 16,
                                                         fontWeight: 400,
                                                         fontSize: 16,
                                                         lineHeight: '140%',
