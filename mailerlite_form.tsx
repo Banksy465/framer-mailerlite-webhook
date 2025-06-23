@@ -677,13 +677,11 @@ export default function MailerLiteForm({
     const optionStyle = (idx: number, optionsLength: number) => ({
         display: 'flex',
         alignItems: 'flex-start',
-        marginBottom: 0,
+        marginBottom: idx === optionsLength - 1 ? 0 : 16,
         fontWeight: 400,
         fontSize: 16,
-        lineHeight: '140%',
+        lineHeight: '24px',
         color: colors.textSecondary,
-        minHeight: 44,
-        minWidth: 44,
         padding: 0,
         position: 'relative',
     });
