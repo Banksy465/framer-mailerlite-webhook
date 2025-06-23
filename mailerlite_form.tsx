@@ -176,6 +176,9 @@ export interface Props {
     showMarketingPermissions?: boolean
     marketingPermissionsTitle?: string
     marketingPermissionsText?: string
+    submitButtonText?: string
+    successHeading?: string
+    successBody?: string
 }
 
 export default function MailerLiteForm({
@@ -192,6 +195,9 @@ export default function MailerLiteForm({
     showMarketingPermissions = true,
     marketingPermissionsTitle = "Marketing Permissions",
     marketingPermissionsText = "The information you provide on this form will only be used to provide you with updates and personalized marketing.",
+    submitButtonText = "Submit",
+    successHeading = "Success!",
+    successBody = "Your form was submitted.",
 }: Props) {
     const generateValue = (label = "") =>
         label
@@ -600,13 +606,30 @@ export default function MailerLiteForm({
                     fontFamily: typography.fontFamily,
                 }}
             >
-                <h2 style={{ color: colors.brandBlue }}>
-                    {mode === "unsubscribe" ? "Unsubscribed" : "Success!"}
+                <h2
+                    style={{
+                        fontWeight: 400,
+                        fontSize: 32,
+                        lineHeight: "120%",
+                        color: "#030a27",
+                        marginTop: 8,
+                        marginBottom: 0,
+                    }}
+                >
+                    {mode === "unsubscribe" ? "Unsubscribed" : successHeading}
                 </h2>
-                <p style={{ color: colors.textSecondary, marginBottom: 24 }}>
+                <p
+                    style={{
+                        fontSize: 18,
+                        lineHeight: "150%",
+                        color: "rgba(4, 12, 51, 0.7)",
+                        marginTop: 0,
+                        marginBottom: 24,
+                    }}
+                >
                     {mode === "unsubscribe"
                         ? "You have been successfully removed."
-                        : "Your form was submitted."}
+                        : successBody}
                 </p>
                 <button
                     onClick={resetForm}
@@ -695,7 +718,7 @@ export default function MailerLiteForm({
                     >
                         <h3
                             id="error-summary-title"
-                            style={{ marginTop: 0, marginBottom: 2 }}
+                            style={{ marginTop: 0, marginBottom: 2, fontSize: 14 }}
                         >
                             Please complete required fields.
                         </h3>
@@ -711,7 +734,7 @@ export default function MailerLiteForm({
                                             style={{
                                                 textDecoration: "none",
                                                 color: "#ff0000",
-                                                fontSize: 13,
+                                                fontSize: 14,
                                             }}
                                         >
                                             {message}
@@ -784,6 +807,7 @@ export default function MailerLiteForm({
                                                 style={{
                                                     color: "#ff0000",
                                                     marginBottom: "2px",
+                                                    fontSize: 14,
                                                 }}
                                                 role="alert"
                                             >
@@ -1077,36 +1101,38 @@ export default function MailerLiteForm({
                         {formError}
                     </div>
                 )}
-                <button
-                    type="submit"
-                    disabled={submitting}
-                    style={{
-                        width: "100%",
-                        maxWidth: 200,
-                        height: 48,
-                        padding: "0 24px",
-                        fontSize: 14,
-                        lineHeight: "20px",
-                        fontWeight: 700,
-                        letterSpacing: "0.02em",
-                        fontFamily: "'Poppins', sans-serif",
-                        textTransform: "uppercase",
-                        backgroundColor: "#143cff",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: 32,
-                        cursor: submitting ? "not-allowed" : "pointer",
-                        marginTop: "24px",
-                        marginBottom: "16px",
-                    }}
-                    aria-busy={submitting}
-                >
-                    {submitting
-                        ? "Submitting..."
-                        : mode === "unsubscribe"
-                          ? "Unsubscribe"
-                          : "Submit"}
-                </button>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    <button
+                        type="submit"
+                        disabled={submitting}
+                        style={{
+                            width: '100%',
+                            maxWidth: 360,
+                            height: 48,
+                            padding: '0 24px',
+                            fontSize: 14,
+                            lineHeight: '20px',
+                            fontWeight: 700,
+                            letterSpacing: '0.02em',
+                            fontFamily: "'Poppins', sans-serif",
+                            textTransform: 'uppercase',
+                            backgroundColor: '#143cff',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: 32,
+                            cursor: submitting ? 'not-allowed' : 'pointer',
+                            marginTop: '24px',
+                            marginBottom: '16px',
+                        }}
+                        aria-busy={submitting}
+                    >
+                        {submitting
+                            ? 'Submitting...'
+                            : mode === 'unsubscribe'
+                                ? 'Unsubscribe'
+                                : submitButtonText}
+                    </button>
+                </div>
                 {/* Privacy Policy Acknowledgment */}
                 {mode === "subscribe" && (
                     <p
@@ -1157,6 +1183,11 @@ addPropertyControls(MailerLiteForm, {
         title: "Subtitle",
         defaultValue:
             "Get OneSpring news, updates, and insights delivered to your inbox.",
+    },
+    submitButtonText: {
+        type: ControlType.String,
+        title: "Button Text",
+        defaultValue: "Submit",
     },
     fields: {
         type: ControlType.Array,
@@ -1296,5 +1327,15 @@ addPropertyControls(MailerLiteForm, {
         defaultValue:
             "The information you provide on this form will only be used to provide you with updates and personalized marketing.",
         hidden: (props) => !props.showMarketingPermissions,
+    },
+    successHeading: {
+        type: ControlType.String,
+        title: "Success Heading",
+        defaultValue: "Success!",
+    },
+    successBody: {
+        type: ControlType.String,
+        title: "Success Body",
+        defaultValue: "Your form was submitted.",
     },
 })
