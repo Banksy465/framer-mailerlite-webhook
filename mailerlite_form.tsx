@@ -673,6 +673,21 @@ export default function MailerLiteForm({
             ? fields.filter((f) => f.type === "email")
             : fields
 
+    // Define a shared style object for radio/checkbox options:
+    const optionStyle = (idx: number, optionsLength: number) => ({
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: idx === optionsLength - 1 ? 0 : 16,
+        fontWeight: 400,
+        fontSize: 16,
+        lineHeight: '140%',
+        color: colors.textSecondary,
+        minHeight: 44,
+        minWidth: 44,
+        padding: 0,
+        position: 'relative',
+    });
+
     return (
         <form
             id={formId}
@@ -849,18 +864,7 @@ export default function MailerLiteForm({
                                             {options.map((opt, idx) => (
                                                 <label
                                                     key={opt.value}
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        marginBottom: idx === options.length - 1 ? 0 : 16,
-                                                        fontWeight: 400,
-                                                        fontSize: 16,
-                                                        lineHeight: '140%',
-                                                        color: colors.textSecondary,
-                                                        minHeight: 44,
-                                                        minWidth: 44,
-                                                        padding: '0',
-                                                    }}
+                                                    style={optionStyle(idx, options.length + (allowOther ? 1 : 0))}
                                                 >
                                                     <input
                                                         type="radio"
@@ -878,15 +882,7 @@ export default function MailerLiteForm({
                                             ))}
                                             {allowOther && (
                                                 <label
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        marginBottom: 16,
-                                                        fontWeight: 400,
-                                                        fontSize: 16,
-                                                        lineHeight: '140%',
-                                                        color: colors.textSecondary,
-                                                    }}
+                                                    style={optionStyle(options.length, options.length + 1)}
                                                 >
                                                     <input
                                                         type="radio"
@@ -931,16 +927,7 @@ export default function MailerLiteForm({
                                                 return (
                                                     <label
                                                         key={opt.value}
-                                                        style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            marginBottom: 16,
-                                                            fontWeight: 400,
-                                                            fontSize: 16,
-                                                            lineHeight: '140%',
-                                                            color: colors.textSecondary,
-                                                            position: 'relative',
-                                                        }}
+                                                        style={optionStyle(idx, options.length + (allowOther ? 1 : 0))}
                                                     >
                                                         <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative' }}>
                                                             <input
@@ -987,16 +974,7 @@ export default function MailerLiteForm({
                                             })}
                                             {allowOther && (
                                                 <label
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        marginBottom: 16,
-                                                        fontWeight: 400,
-                                                        fontSize: 16,
-                                                        lineHeight: '140%',
-                                                        color: colors.textSecondary,
-                                                        position: 'relative',
-                                                    }}
+                                                    style={optionStyle(options.length, options.length + 1)}
                                                 >
                                                     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative' }}>
                                                         <input
