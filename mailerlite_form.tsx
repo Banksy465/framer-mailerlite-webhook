@@ -604,6 +604,11 @@ export default function MailerLiteForm({
                     textAlign: "center",
                     padding: "40px 20px",
                     fontFamily: typography.fontFamily,
+                    minHeight: '88vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}
             >
                 <h2
@@ -611,7 +616,7 @@ export default function MailerLiteForm({
                         fontWeight: 400,
                         fontSize: 32,
                         lineHeight: "120%",
-                        color: "#030a27",
+                        color: colors.textPrimary,
                         marginTop: 8,
                         marginBottom: 0,
                     }}
@@ -620,9 +625,9 @@ export default function MailerLiteForm({
                 </h2>
                 <p
                     style={{
-                        fontSize: 18,
-                        lineHeight: "150%",
-                        color: "rgba(4, 12, 51, 0.7)",
+                        fontSize: 16,
+                        lineHeight: '140%',
+                        color: colors.textSecondary,
                         marginTop: 0,
                         marginBottom: 24,
                     }}
@@ -683,7 +688,7 @@ export default function MailerLiteForm({
                                 marginTop:
                                     Object.keys(errors).length > 0 ? 4 : 8,
                                 marginBottom: 0,
-                                color: "#030a27",
+                                color: colors.textPrimary,
                             }}
                         >
                             {title}
@@ -693,11 +698,10 @@ export default function MailerLiteForm({
                         <p
                             style={{
                                 fontSize: 18,
-                                lineHeight: "150%",
-                                marginTop: 0,
-                                marginBottom:
-                                    Object.keys(errors).length > 0 ? 8 : 24,
-                                color: "rgba(4, 12, 51, 0.7)",
+                                lineHeight: '140%',
+                                marginTop: 8,
+                                marginBottom: Object.keys(errors).length > 0 ? 8 : fieldPadding,
+                                color: colors.textSecondary,
                             }}
                         >
                             {subtitle}
@@ -774,7 +778,7 @@ export default function MailerLiteForm({
                                             fontWeight: 600,
                                             fontSize: 16,
                                             marginBottom: 0,
-                                            color: "#030a27",
+                                            color: colors.textPrimary,
                                         }}
                                     >
                                         {label}
@@ -784,8 +788,10 @@ export default function MailerLiteForm({
                                         <div
                                             id={`${name}-hint`}
                                             style={{
-                                                fontSize: "16px",
-                                                color: "#666",
+                                                fontSize: 16,
+                                                lineHeight: '140%',
+                                                color: colors.textSecondary,
+                                                marginTop: 4,
                                             }}
                                         >
                                             {hint}
@@ -829,7 +835,9 @@ export default function MailerLiteForm({
                                                         alignItems: "flex-start",
                                                         marginBottom: 12,
                                                         fontWeight: 400,
-                                                        fontSize: 18,
+                                                        fontSize: 16,
+                                                        lineHeight: '140%',
+                                                        color: colors.textSecondary,
                                                     }}
                                                 >
                                                     <input
@@ -857,7 +865,9 @@ export default function MailerLiteForm({
                                                         display: "flex",
                                                         alignItems: "flex-start",
                                                         fontWeight: 400,
-                                                        fontSize: 18,
+                                                        fontSize: 16,
+                                                        lineHeight: '140%',
+                                                        color: colors.textSecondary,
                                                     }}
                                                 >
                                                     <input
@@ -910,7 +920,9 @@ export default function MailerLiteForm({
                                                         alignItems: "flex-start",
                                                         marginBottom: 12,
                                                         fontWeight: 400,
-                                                        fontSize: 18,
+                                                        fontSize: 16,
+                                                        lineHeight: '140%',
+                                                        color: colors.textSecondary,
                                                     }}
                                                 >
                                                     <input
@@ -956,7 +968,9 @@ export default function MailerLiteForm({
                                                         alignItems:
                                                             "flex-start",
                                                         fontWeight: 400,
-                                                        fontSize: 18,
+                                                        fontSize: 16,
+                                                        lineHeight: '140%',
+                                                        color: colors.textSecondary,
                                                     }}
                                                 >
                                                     <input
@@ -1069,7 +1083,7 @@ export default function MailerLiteForm({
                     >
                         <strong
                             style={{
-                                color: "#030a27",
+                                color: colors.textPrimary,
                                 fontSize: 14,
                                 lineHeight: "20px",
                                 fontWeight: 600,
@@ -1079,10 +1093,10 @@ export default function MailerLiteForm({
                         </strong>
                         <p
                             style={{
-                                fontSize: 14,
-                                lineHeight: "20px",
+                                fontSize: 16,
+                                lineHeight: '140%',
                                 margin: "4px 0 0 0",
-                                color: "rgba(4, 12, 51, 0.7)",
+                                color: colors.textSecondary,
                             }}
                         >
                             {marketingPermissionsText}
@@ -1137,18 +1151,20 @@ export default function MailerLiteForm({
                 {mode === "subscribe" && (
                     <p
                         style={{
-                            fontSize: 12,
-                            color: "rgba(4, 12, 51, 0.7)",
+                            fontSize: 16,
+                            lineHeight: '140%',
+                            color: colors.textSecondary,
                         }}
                     >
-                        <span style={{ fontSize: 14, lineHeight: "20px" }}>
+                        <span style={{ fontSize: 16, lineHeight: '140%' }}>
                             By clicking below to submit this form, you
                             acknowledge that the information you provide will be
-                            processed in accordance with our{" "}
+                            processed in accordance with our{' '}
                             <a
                                 href="https://www.onespring.net/privacy-policy"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                style={{ color: colors.brandBlue, textDecoration: 'underline' }}
                             >
                                 Privacy Policy
                             </a>
@@ -1173,6 +1189,13 @@ MailerLiteForm.defaultProps = {
 
 // Add Framer property controls for visual editing in Framer UI
 addPropertyControls(MailerLiteForm, {
+    mode: {
+        type: ControlType.Enum,
+        title: "Form Mode",
+        options: ["subscribe", "unsubscribe"],
+        optionTitles: ["Subscribe/Preferences", "Unsubscribe"],
+        defaultValue: "subscribe",
+    },
     title: {
         type: ControlType.String,
         title: "Title",
@@ -1280,13 +1303,6 @@ addPropertyControls(MailerLiteForm, {
         optionTitles: group_options.map((g) => g.name),
         defaultValue: group_options[0].id,
     },
-    mode: {
-        type: ControlType.Enum,
-        title: "Form Mode",
-        options: ["subscribe", "unsubscribe"],
-        optionTitles: ["Subscribe/Preferences", "Unsubscribe"],
-        defaultValue: "subscribe",
-    },
     containerFill: {
         type: ControlType.Color,
         title: "Fill",
@@ -1294,7 +1310,7 @@ addPropertyControls(MailerLiteForm, {
     },
     containerPadding: {
         type: ControlType.String,
-        title: "Padding",
+        title: "Container Padding",
         defaultValue: "24px 24px 40px 24px",
     },
     containerBorderColor: {
@@ -1304,7 +1320,7 @@ addPropertyControls(MailerLiteForm, {
     },
     fieldPadding: {
         type: ControlType.Number,
-        title: "Field Padding",
+        title: "Field Gap",
         defaultValue: 24,
         min: 0,
         max: 100,
