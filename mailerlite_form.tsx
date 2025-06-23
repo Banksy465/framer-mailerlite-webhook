@@ -676,7 +676,7 @@ export default function MailerLiteForm({
     // Define a shared style object for radio/checkbox options:
     const optionStyle = (idx: number, optionsLength: number) => ({
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         marginBottom: 0,
         fontWeight: 400,
         fontSize: 16,
@@ -878,6 +878,7 @@ export default function MailerLiteForm({
                                                         }}
                                                         required={required}
                                                         aria-required={required}
+                                                        style={{ marginTop: 2 }}
                                                     />
                                                     {opt.label}
                                                 </label>
@@ -900,6 +901,7 @@ export default function MailerLiteForm({
                                                         }}
                                                         required={required}
                                                         aria-required={required}
+                                                        style={{ marginTop: 2 }}
                                                     />
                                                     Other:
                                                     <span style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
@@ -910,6 +912,7 @@ export default function MailerLiteForm({
                                                             value={(formData[`${name}_other`] as string) || ""}
                                                             onChange={handleChange}
                                                             disabled={formData[name] !== 'other'}
+                                                            style={{ marginTop: 2 }}
                                                         />
                                                     </span>
                                                 </label>
@@ -931,7 +934,7 @@ export default function MailerLiteForm({
                                                         key={opt.value}
                                                         style={optionStyle(idx, options.length + (allowOther ? 1 : 0))}
                                                     >
-                                                        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative' }}>
+                                                        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative', marginTop: 2 }}>
                                                             <input
                                                                 type="checkbox"
                                                                 name={name}
@@ -978,7 +981,7 @@ export default function MailerLiteForm({
                                                 <label
                                                     style={optionStyle(options.length, options.length + 1)}
                                                 >
-                                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative' }}>
+                                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, marginRight: 12, position: 'relative', marginTop: 2 }}>
                                                         <input
                                                             type="checkbox"
                                                             name={name}
@@ -1024,6 +1027,7 @@ export default function MailerLiteForm({
                                                             value={(formData[`${name}_other`] as string) || ""}
                                                             onChange={handleChange}
                                                             disabled={!(Array.isArray(formData[name]) && (formData[name] as string[]).includes('other'))}
+                                                            style={{ marginTop: 2 }}
                                                         />
                                                     </span>
                                                 </label>
