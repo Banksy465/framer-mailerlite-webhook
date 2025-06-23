@@ -65,24 +65,63 @@ export default async function handler(
 
     // Handle subscribe/update requests
     try {
-        const payload = {
-            email,
-            fields: fields ? Object.fromEntries(
-                Object.entries(fields).map(([key, value]) => [key.toLowerCase(), value])
-            ) : {},
-            groups: groups || [],
+        const subscriberCheckResponse = await fetch(
+            `${MAILERLITE_API_URL}/subscribers/${encodeURIComponent(email)}`,
+            { headers }
+        )
+
+        const fieldsPayload = fields
+            ? Object.fromEntries(
+                  Object.entries(fields).map(([key, value]) => [
+                      key.toLowerCase(),
+                      value,
+                  ])
+              )
+            : {}
+
+        let apiResponse
+        let payload
+
+        if (subscriberCheckResponse.status === 200) {
+            // Subscriber exists, so we UPDATE them (PUT)
+            payload = {
+                fields: fieldsPayload,
+                groups: groups || [],
+            }
+            apiResponse = await fetch(
+                `${MAILERLITE_API_URL}/subscribers/${encodeURIComponent(
+                    email
+                )}`,
+                {
+                    method: "PUT",
+                    headers,
+                    body: JSON.stringify(payload),
+                }
+            )
+        } else if (subscriberCheckResponse.status === 404) {
+            // Subscriber does not exist, so we CREATE them (POST)
+            payload = {
+                email,
+                fields: fieldsPayload,
+                groups: groups || [],
+            }
+            apiResponse = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(payload),
+            })
+        } else {
+            // Handle other potential errors from the check
+            const errorData = await subscriberCheckResponse.json()
+            return res
+                .status(subscriberCheckResponse.status)
+                .json(errorData)
         }
 
-        const response = await fetch(`${MAILERLITE_API_URL}/subscribers`, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(payload),
-        })
+        const data = await apiResponse.json()
 
-        const data = await response.json()
-
-        if (!response.ok) {
-            return res.status(response.status).json(data)
+        if (!apiResponse.ok) {
+            return res.status(apiResponse.status).json(data)
         }
 
         return res.status(200).json(data)
