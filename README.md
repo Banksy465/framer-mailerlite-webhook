@@ -68,3 +68,4 @@ You are safe to make your repository public!
 
 If you want, I can give you a command to scan your repo for secrets, or you can let me know if you want a more thorough check! 
 
+Test after reorganization
